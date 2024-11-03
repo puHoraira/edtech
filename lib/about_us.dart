@@ -103,17 +103,27 @@ class _MemberCardState extends State<MemberCard> {
     final Uri emailLaunchUri = Uri(
       scheme: 'mailto',
       path: widget.email,
-      query: encodeQueryParameters({
-        'subject': 'Hello ${widget.name}', // Predefined subject
-        'body': 'Hi ${widget.name}, I would like to reach out to you regarding...', // Predefined email body
-      }),
+      queryParameters: {'subject': 'Contact Us'},
     );
 
-    // Launch the email client
-    if (await canLaunch(emailLaunchUri.toString())) {
-      await launch(emailLaunchUri.toString());
+    // Use launchUrl with settings
+    if (await canLaunchUrl(emailLaunchUri)) {
+      await launchUrl(emailLaunchUri, mode: LaunchMode.externalApplication);
     } else {
-      throw 'Could not launch $emailLaunchUri';
+      // Show an error dialog instead of throwing an exception
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text('Error'),
+          content: Text('Could not open email app. Please try again later.'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text('OK'),
+            ),
+          ],
+        ),
+      );
     }
   }
 
