@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'welcome_screen.dart';
 import 'registration_screen.dart';
+import 'forgot_password_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -32,6 +33,15 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
+  void _navigateToForgotPassword() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const ForgotPasswordScreen(),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,12 +51,12 @@ class _LoginScreenState extends State<LoginScreen> {
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
-        backgroundColor: Colors.deepPurpleAccent,
+        backgroundColor: Colors.indigo,
       ),
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           gradient: LinearGradient(
-            colors: [Colors.deepPurpleAccent, Colors.pinkAccent],
+            colors: [Color(0xFF283593), Color(0xFF3949AB), Color(0xFF5C6BC0)],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
@@ -58,26 +68,26 @@ class _LoginScreenState extends State<LoginScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const CircleAvatar(
-                  backgroundColor: Colors.white,
+                  backgroundColor: Colors.white24,
                   radius: 50,
                   child: Icon(
                     Icons.person,
                     size: 50,
-                    color: Colors.deepPurpleAccent,
+                    color: Colors.indigo,
                   ),
                 ),
                 const SizedBox(height: 20),
                 const Text(
                   "Welcome Back!",
                   style: TextStyle(
-                    fontSize: 28,
+                    fontSize: 26,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
                   ),
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: 10),
                 const Text(
-                  "Please log in to continue",
+                  "Log in to continue",
                   style: TextStyle(
                     fontSize: 16,
                     color: Colors.white70,
@@ -89,11 +99,11 @@ class _LoginScreenState extends State<LoginScreen> {
                   decoration: InputDecoration(
                     labelText: 'Username',
                     labelStyle: const TextStyle(color: Colors.white),
-                    prefixIcon: const Icon(Icons.person, color: Colors.white),
+                    prefixIcon: const Icon(Icons.person, color: Colors.white70),
                     filled: true,
                     fillColor: Colors.white24,
                     border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.0),
+                      borderRadius: BorderRadius.circular(12.0),
                       borderSide: BorderSide.none,
                     ),
                   ),
@@ -106,11 +116,11 @@ class _LoginScreenState extends State<LoginScreen> {
                   decoration: InputDecoration(
                     labelText: 'Password',
                     labelStyle: const TextStyle(color: Colors.white),
-                    prefixIcon: const Icon(Icons.lock, color: Colors.white),
+                    prefixIcon: const Icon(Icons.lock, color: Colors.white70),
                     filled: true,
                     fillColor: Colors.white24,
                     border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.0),
+                      borderRadius: BorderRadius.circular(12.0),
                       borderSide: BorderSide.none,
                     ),
                   ),
@@ -123,23 +133,34 @@ class _LoginScreenState extends State<LoginScreen> {
                     backgroundColor: Colors.white,
                     padding: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 80.0),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.0),
+                      borderRadius: BorderRadius.circular(12.0),
                     ),
                   ),
                   child: const Text(
                     "Log In",
                     style: TextStyle(
-                      color: Colors.deepPurpleAccent,
+                      color: Colors.indigo,
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
-                const SizedBox(height: 10),
+                const SizedBox(height: 16),
                 TextButton(
                   onPressed: _navigateToRegister,
                   child: const Text(
                     "Don't have an account? Sign Up",
+                    style: TextStyle(
+                      color: Colors.white70,
+                      fontSize: 14,
+                      decoration: TextDecoration.underline,
+                    ),
+                  ),
+                ),
+                TextButton(
+                  onPressed: _navigateToForgotPassword,
+                  child: const Text(
+                    "Forgot Password?",
                     style: TextStyle(
                       color: Colors.white70,
                       fontSize: 14,

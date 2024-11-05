@@ -40,35 +40,43 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          "EdTech Home",
+          "EdTech: Our First App",
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
-        backgroundColor: Colors.deepPurpleAccent,
+        backgroundColor: Colors.indigo,
       ),
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           gradient: LinearGradient(
-            colors: [Colors.deepPurpleAccent, Colors.pinkAccent],
+            colors: [Color(0xFF283593), Color(0xFF3949AB), Color(0xFF5C6BC0)],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
         ),
         child: Center(
           child: _isLoading
-              ? const CircularProgressIndicator() // Loading spinner
+              ? const CircularProgressIndicator(
+            color: Colors.white,
+          )
               : Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              // Logo Section
+              CircleAvatar(
+                backgroundImage: const AssetImage('assets/img/logo.jpeg'),
+                radius: 50,
+              ),
+              const SizedBox(height: 22),
               const Text(
                 "Welcome to EdTech!",
                 style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
+                  fontSize: 26,
+                  fontWeight: FontWeight.w600,
                   color: Colors.white,
                 ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 8),
               const Text(
                 "Your gateway to learning",
                 style: TextStyle(
@@ -77,68 +85,45 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
               const SizedBox(height: 40),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.pushNamed(context, '/login'); // Navigate to Login
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 60.0),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                ),
-                child: const Text(
-                  "Login",
-                  style: TextStyle(
-                    color: Colors.deepPurpleAccent,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
+
+              // Buttons Section
+              _buildMenuButton("Login", Colors.blueAccent, () {
+                Navigator.pushNamed(context, '/login');
+              }),
               const SizedBox(height: 16),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.pushNamed(context, '/about'); // Navigate to About Us
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 50.0),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                ),
-                child: const Text(
-                  "About Us",
-                  style: TextStyle(
-                    color: Colors.deepPurpleAccent,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
+              _buildMenuButton("About Us", Colors.teal, () {
+                Navigator.pushNamed(context, '/about');
+              }),
               const SizedBox(height: 16),
-              ElevatedButton(
-                onPressed: _contactUs,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 50.0),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                ),
-                child: const Text(
-                  "Contact Us",
-                  style: TextStyle(
-                    color: Colors.deepPurpleAccent,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
+              _buildMenuButton("Contact Us", Colors.deepOrange, _contactUs),
+              const SizedBox(height: 16),
+              _buildMenuButton("Privacy Policy", Colors.purple, () {
+                Navigator.pushNamed(context, '/privacy');
+              }),
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildMenuButton(String text, Color color, VoidCallback onPressed) {
+    return ElevatedButton(
+      onPressed: onPressed,
+      style: ElevatedButton.styleFrom(
+        backgroundColor: color,
+        padding: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 60.0),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12.0),
+        ),
+        elevation: 4,
+      ),
+      child: Text(
+        text,
+        style: const TextStyle(
+          color: Colors.white,
+          fontSize: 16,
+          fontWeight: FontWeight.bold,
         ),
       ),
     );

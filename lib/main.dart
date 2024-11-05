@@ -1,3 +1,4 @@
+import 'package:edtech/privacy_policy.dart';
 import 'package:flutter/material.dart';
 import 'home_screen.dart';
 import 'about_us.dart';
@@ -25,7 +26,9 @@ class MyApp extends StatelessWidget {
       routes: {
         '/about': (context) => AboutUs(),
         '/login': (context) => const LoginScreen(),
+        '/privacy': (context) => const PrivacyPolicy(), // New route for Privacy Policy
       },
+
     );
   }
 }
