@@ -61,7 +61,7 @@ flutter:
     - assets/img/adib.png
     - assets/img/shova.png
     - assets/img/avi.png
-    - assets/img/logo.jpeg
+    - assets/img/logo.png
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
