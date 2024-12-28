@@ -1,3 +1,3 @@
 # edtech
 
-This is an education app for edtechv2.
+This is an education app for edtech.
