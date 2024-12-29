@@ -12,7 +12,7 @@ flutter pub add go_router
 
 flutter pub add cloud_firestore
 
-flutter pub add firebase_auth
+flutter pub add firebase_auth (normal users no need to perform that)
 
 flutter pub add uuid
 
