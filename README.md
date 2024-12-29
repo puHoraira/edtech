@@ -40,6 +40,6 @@ androidManifest.xml modificaitons:
 <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" />  // after <manifest>
 <intent>
 <action android:name="android.intent.action.VIEW" />
-<category android:name="android.intent.category.BROWSABLE" />
+<category android:nagme="android.intent.category.BROWSABLE" />
 <data android:scheme="https" />
 </intent>
