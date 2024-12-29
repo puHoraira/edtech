@@ -9,12 +9,19 @@ Project for second semester second year android lab course
 
 # commands
 flutter pub add go_router
+
 flutter pub add cloud_firestore
+
 flutter pub add firebase_auth
+
 flutter pub add uuid
+
 flutter pub add url_launcher
+
 flutter pub add shared_preferences
+
 flutterfire configure
+
 
 
 android sdk version problem solution:
