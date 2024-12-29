@@ -2,6 +2,9 @@
 
 Project about Online Education App (EdTech)
 
+
+Date: 29/12/2024
+Project for second semester second year android lab course
 ## Getting Started
 
 # commands
