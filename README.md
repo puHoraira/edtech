@@ -22,6 +22,8 @@ flutter pub add shared_preferences
 
 flutterfire configure
 
+flutter pub add firebase_storage
+
 
 
 android sdk version problem solution:
