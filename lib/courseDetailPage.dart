@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import 'CourseDocumentsSection.dart';
 import 'launchNewClass.dart';
 import 'launchNewQuiz.dart';
 import 'viewPreviousClasses.dart';
@@ -61,6 +62,11 @@ class CourseDetailPage extends StatelessWidget {
                   // Actions Grid
                   _buildActionGrid(context),
 
+                  const SizedBox(height: 16),
+
+
+                  // Add the documents section here
+                  CourseDocumentsSection(courseId: courseId),
                   const SizedBox(height: 16),
 
                   // Enrolled Students Section

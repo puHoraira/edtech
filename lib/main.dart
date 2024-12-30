@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import './screens/onboard/onboarding.dart';
+import 'firebase_options.dart';
 import 'homepage.dart';
 import 'screens/roleSelection/roleSelection.dart';
 import 'screens/student/registration.dart';
@@ -9,11 +11,24 @@ import 'screens/instructor/registration.dart';
 import 'screens/instructor/login.dart';
 import 'screens/student/login.dart';
 
-// Initialize Firebase
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
-  runApp(MyApp());
+  try {
+    WidgetsFlutterBinding.ensureInitialized();
+
+    print('Initializing Firebase...'); // Debug print
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+    print('Firebase initialized successfully'); // Debug print
+
+    // Configure Firebase Storage without await
+    FirebaseStorage.instance.setMaxUploadRetryTime(const Duration(seconds: 5));
+    print('Firebase Storage configured'); // Debug print
+    print("Stat");
+    runApp(MyApp());
+  } catch (e) {
+    print('Error in initialization: $e'); // Debug print
+  }
 }
 
 class MyApp extends StatelessWidget {
@@ -60,6 +75,7 @@ class MyApp extends StatelessWidget {
       ),
     ],
   );
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
@@ -71,4 +87,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
