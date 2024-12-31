@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'courseDetailPage.dart'; // Import the CourseDetailPage
+import 'InstructorCourseDetailPage.dart'; // Import the CourseDetailPage
 import 'launchNewCourse.dart';
 
 class LaunchedCoursesPage extends StatelessWidget {
