@@ -4,6 +4,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:edtech/ClassesListPage.dart';
 
 import 'QuizDetailPage.dart';
+import 'SQuizDetailPage.dart';
 import 'StuCourseDoc.dart';
 import 'classDetailPage.dart';
 
@@ -85,7 +86,6 @@ class StudentCourseDetailPage extends StatelessWidget {
       ),
     );
   }
-
   Widget _buildCourseCard(DocumentSnapshot courseData) {
     return Card(
       elevation: 8,
@@ -230,7 +230,7 @@ class StudentCourseDetailPage extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => QuizDetailPage(quizId: quiz.id),
+                      builder: (context) => SQuizDetailPage(quizId: quiz.id, studentId: studentId, courseId: courseId,),
                     ),
                   );
                 },

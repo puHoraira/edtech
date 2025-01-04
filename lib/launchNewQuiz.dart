@@ -125,6 +125,12 @@ class _LaunchNewQuizPageState extends State<LaunchNewQuizPage> {
                       _correctAnswerController.text.isEmpty) {
                     _showErrorDialog('All fields must be filled before adding a question.');
                   } else {
+                    int? correctAnswerIndex = int.tryParse(_correctAnswerController.text);
+                    if (correctAnswerIndex == null || correctAnswerIndex < 1 || correctAnswerIndex > 4) {
+                      _showErrorDialog('Correct Answer must be a number between 1 and 4.');
+                      return;
+                    }
+
                     setState(() {
                       _questions.add({
                         'question': _questionController.text,
@@ -134,7 +140,7 @@ class _LaunchNewQuizPageState extends State<LaunchNewQuizPage> {
                           _optionController3.text,
                           _optionController4.text,
                         ],
-                        'correctAnswer': int.tryParse(_correctAnswerController.text),
+                        'correctAnswer': correctAnswerIndex - 1, // Convert 1-based to 0-based index
                       });
                       _clearInputs();
                     });

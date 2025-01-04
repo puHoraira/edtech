@@ -240,10 +240,11 @@ class _CoursesPageState extends State<CoursesPage> {
   }
 
   Future<Map<String, dynamic>> _getInstructorDetails(String instructorId) async {
+    int a = int.parse(instructorId);
     try {
       final instructorSnapshot = await FirebaseFirestore.instance
           .collection('users')
-          .where('userId', isEqualTo: instructorId)
+          .where('userId', isEqualTo: a)
           .limit(1)
           .get();
 
