@@ -5,7 +5,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-
 class InstructorLoginPage extends StatefulWidget {
   @override
   _InstructorLoginPageState createState() => _InstructorLoginPageState();
@@ -85,7 +84,21 @@ class _InstructorLoginPageState extends State<InstructorLoginPage> {
                         return null;
                       },
                     ),
-                    SizedBox(height: 20),
+                    SizedBox(height: 10),
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: TextButton(
+                        onPressed: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => ForgotPasswordPage()),
+                        ),
+                        child: Text(
+                          'Forgot Password?',
+                          style: TextStyle(color: Colors.blueAccent, fontSize: 16),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 10),
                     ElevatedButton(
                       onPressed: () async {
                         if (_formKey.currentState!.validate()) {
@@ -113,9 +126,6 @@ class _InstructorLoginPageState extends State<InstructorLoginPage> {
                             String someField = userDoc['userId'].toString();
                             if (userDoc.exists &&
                                 userDoc['role'] == 'instructor') {
-                              // Instructor(uid: userDoc['uid'], userId: userDoc['userId'], name: userDoc['displayName'], email: userDoc['email'], expertise: userDoc['expertise'] );
-                              // SharedPreferences prefs = await SharedPreferences.getInstance();
-                              // await prefs.setBool('isLoggedIn', true);
                               print("object");
                               context.go('/role-selection/instructor/home?instructorId=$someField');
                             } else {
@@ -153,6 +163,87 @@ class _InstructorLoginPageState extends State<InstructorLoginPage> {
                     ),
                   ],
                 ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class ForgotPasswordPage extends StatelessWidget {
+  final TextEditingController _emailController = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Forgot Password'),
+        backgroundColor: Colors.blueAccent,
+        elevation: 0,
+      ),
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Card(
+            elevation: 10,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            child: Padding(
+              padding: const EdgeInsets.all(24.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    'Reset Password',
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.blueAccent,
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                  TextField(
+                    controller: _emailController,
+                    keyboardType: TextInputType.emailAddress,
+                    decoration: InputDecoration(
+                      labelText: 'Email',
+                      prefixIcon: Icon(Icons.email, color: Colors.blueAccent),
+                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.blueAccent, width: 2),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                  ElevatedButton(
+                    onPressed: () async {
+                      try {
+                        await FirebaseAuth.instance
+                            .sendPasswordResetEmail(email: _emailController.text.trim());
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('Password reset email sent!')),
+                        );
+                      } catch (e) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('Error: $e')),
+                        );
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
+                      padding: EdgeInsets.symmetric(vertical: 16.0),
+                      backgroundColor: Colors.blueAccent,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    child: Text(
+                      'Send Reset Email',
+                      style: TextStyle(fontSize: 18, color: Colors.white),
+                    ),
+                  ),
+                ],
               ),
             ),
           ),

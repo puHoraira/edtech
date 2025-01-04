@@ -33,6 +33,7 @@ class LaunchedCoursesPage extends StatelessWidget {
           }
 
           if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+            print(instructorId);
             return const Center(
               child: Text(
                 "No courses launched yet.",

@@ -160,7 +160,7 @@ class CourseDetailPage extends StatelessWidget {
                         },
                         child: const Text('Enroll', style: TextStyle(fontSize: 18)),
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.deepPurple,
+                          backgroundColor: Colors.lightBlueAccent,
                           padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8),
