@@ -1,4 +1,6 @@
+import 'package:edtech/liveClass/utils.dart';
 import 'package:flutter/material.dart';
+import 'package:zego_uikit_prebuilt_video_conference/zego_uikit_prebuilt_video_conference.dart';
 
 class ClassDetailsPage extends StatelessWidget {
   final String classTitle;
@@ -7,6 +9,7 @@ class ClassDetailsPage extends StatelessWidget {
   final String maxStudents;
   final List<String> enrolledStudents;
   final String formattedDate;
+  final String conferenceID;
 
   const ClassDetailsPage({
     Key? key,
@@ -16,6 +19,7 @@ class ClassDetailsPage extends StatelessWidget {
     required this.maxStudents,
     required this.enrolledStudents,
     required this.formattedDate,
+    required this.conferenceID,
   }) : super(key: key);
 
   @override
@@ -44,8 +48,44 @@ class ClassDetailsPage extends StatelessWidget {
             Text('Enrolled Students: ${enrolledStudents.join(', ')}'),
             SizedBox(height: 8),
             Text('Date: $formattedDate'),
+            ElevatedButton(
+              onPressed: () async {
+                String enteredID = conferenceID;
+
+                // Validate conference ID
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => VideoConferencePage(conferenceID: enteredID),
+                    ),
+                  );
+              },
+              child: const Text("Join Meeting"),
+            ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+
+class VideoConferencePage extends StatelessWidget {
+  final String conferenceID;
+
+  const VideoConferencePage({required this.conferenceID, Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      //  appBar: AppBar(title: const Text("Conference Room")),
+      body: ZegoUIKitPrebuiltVideoConference(
+        appID: Utils.app_id,
+        appSign: Utils.app_sign_id,
+        conferenceID: conferenceID,
+        userID: "student_${DateTime.now().millisecondsSinceEpoch}",
+        userName: "Student",
+        config: ZegoUIKitPrebuiltVideoConferenceConfig(),
       ),
     );
   }
