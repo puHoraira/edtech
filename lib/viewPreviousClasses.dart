@@ -1,5 +1,7 @@
-import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:edtech/liveClass/utils.dart';
+import 'package:flutter/material.dart';
+import 'package:zego_uikit_prebuilt_video_conference/zego_uikit_prebuilt_video_conference.dart';
 
 import 'classDetailPage.dart';
 
@@ -47,6 +49,7 @@ class ViewPreviousClassesPage extends StatelessWidget {
               final maxStudents = (classData['maxStudents'] ?? 0).toString();
               final enrolledStudents = List<String>.from(classData['enrolledStudents'] ?? []);
               final formattedDate = _formatDate(createdAt);
+              final fixedConferenceID = classData['conferenceID'];
 
               return Card(
                 margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
@@ -62,6 +65,22 @@ class ViewPreviousClassesPage extends StatelessWidget {
                       Text('Max Students: $maxStudents'),
                       Text('Enrolled: ${enrolledStudents.length} students'),
                       Text('Date: $formattedDate'),
+                      ElevatedButton(
+              onPressed: () async {
+                // Save conference ID in Firebase
+             
+
+                // Navigate to VideoConferencePage with the generated ID
+                Navigator.push(
+                  context,//
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        VideoConferencePage(conferenceID: fixedConferenceID, classTitles: classTitle,),
+                  ),
+                );
+              },
+              child: const Text("Start Meeting"),
+            ),
                     ],
                   ),
                   onTap: () {
@@ -76,6 +95,7 @@ class ViewPreviousClassesPage extends StatelessWidget {
                           maxStudents: maxStudents,
                           enrolledStudents: enrolledStudents,
                           formattedDate: formattedDate,
+                          conferenceID: fixedConferenceID,
                         ),
                       ),
                     );
@@ -92,5 +112,27 @@ class ViewPreviousClassesPage extends StatelessWidget {
   String _formatDate(Timestamp timestamp) {
     final DateTime date = timestamp.toDate();
     return "${date.day}/${date.month}/${date.year} at ${date.hour}:${date.minute.toString().padLeft(2, '0')}";
+  }
+}
+
+class VideoConferencePage extends StatelessWidget {
+  final String conferenceID;
+  final String classTitles;
+
+  const VideoConferencePage({required this.conferenceID, required this.classTitles, Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      // appBar: AppBar(title: const Text("Conference Room")),
+      body: ZegoUIKitPrebuiltVideoConference(
+        appID: Utils.app_id,
+        appSign: Utils.app_sign_id,
+        conferenceID: conferenceID,
+        userID: "student_${DateTime.now().millisecondsSinceEpoch}",
+        userName: classTitles,
+        config: ZegoUIKitPrebuiltVideoConferenceConfig(),
+      ),
+    );
   }
 }

@@ -1,9 +1,6 @@
-import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:edtech/ClassesListPage.dart';
+import 'package:flutter/material.dart';
 
-import 'QuizDetailPage.dart';
 import 'SQuizDetailPage.dart';
 import 'StuCourseDoc.dart';
 import 'classDetailPage.dart';
@@ -148,6 +145,7 @@ class StudentCourseDetailPage extends StatelessWidget {
             final maxStudents = classData['maxStudents'].toString() ?? 'No limit';
             final enrolledStudents = List<String>.from(classData['enrolledStudents'] ?? []);
             final formattedDate = classData['createdAt'].toDate().toString();
+            final meetingID = classData['conferenceID'];
 
             return Card(
               elevation: 4,
@@ -174,6 +172,7 @@ class StudentCourseDetailPage extends StatelessWidget {
                         maxStudents: maxStudents,
                         enrolledStudents: enrolledStudents,
                         formattedDate: formattedDate,
+                        conferenceID: meetingID,
                       ),
                     ),
                   );

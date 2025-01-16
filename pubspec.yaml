@@ -46,7 +46,7 @@ dependencies:
   dio: ^5.7.0
   path_provider: ^2.1.5
   open_file: ^3.5.10
-
+  zego_uikit_prebuilt_video_conference: ^2.9.8
 dev_dependencies:
   flutter_test:
     sdk: flutter

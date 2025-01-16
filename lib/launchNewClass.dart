@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class LaunchNewClassPage extends StatefulWidget {
@@ -109,6 +110,7 @@ class _LaunchNewClassPageState extends State<LaunchNewClassPage> {
                         'maxStudents': maxStudents,
                         'enrolledStudents': [], // Will be filled later
                         'createdAt': FieldValue.serverTimestamp(),
+                        'conferenceID':Random().nextInt(100000).toString(),
                       }).then((_) {
                         ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(content: Text('Class created successfully!'))

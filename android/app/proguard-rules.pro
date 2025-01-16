@@ -1,0 +1,5 @@
+-keep class **.zego.** { *; }
+-keep class com.heytap.msp.push.** { *; }
+-keep class com.huawei.hms.push.** { *; }
+-keep class com.xiaomi.mipush.sdk.** { *; }
+-keep class com.vivo.push.** { *; }
