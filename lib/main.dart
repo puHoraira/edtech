@@ -81,6 +81,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp.router(
       title: 'Study App',
       routerConfig: _router,
+      debugShowCheckedModeBanner: false, // Removes the debug banner
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
