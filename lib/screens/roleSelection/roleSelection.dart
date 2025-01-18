@@ -4,6 +4,8 @@ import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../instructor/login.dart';
+import '../student/login.dart';
 import 'aboutUs.dart';
 import 'contactUs.dart';
 
@@ -77,14 +79,22 @@ class RoleSelectionPage extends StatelessWidget {
                 title: 'I am a Student',
                 subtitle: 'Access learning materials and track progress',
                 icon: Icons.school,
-                onPressed: () => context.go('/role-selection/student'),
+                onPressed: () {Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => StudentLoginPage()),
+                );}
               ),
               SizedBox(height: 20),
               RoleCard(
                 title: 'I am an Instructor',
                 subtitle: 'Create courses and manage students',
                 icon: Icons.account_circle,
-                onPressed: () => context.go('/role-selection/instructor'),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => InstructorLoginPage()),
+                  );
+                },
               ),
               SizedBox(height: 40),
 
@@ -129,7 +139,8 @@ class RoleSelectionPage extends StatelessWidget {
                       icon: Icons.contact_mail,
                       onPressed: () => Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => ContactUsPage()),
+                        MaterialPageRoute(
+                            builder: (context) => ContactUsPage()),
                       ),
                     ),
                     SizedBox(height: 15),

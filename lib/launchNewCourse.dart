@@ -56,7 +56,8 @@ class _LaunchNewCoursePageState extends State<LaunchNewCoursePage> {
             courseId = 'course1';
           }
         }
-
+        print("------------");
+        print(FieldValue.serverTimestamp());
         await FirebaseFirestore.instance.collection('courses').doc(courseId).set({
           'courseId': courseId,
           'title': _titleController.text.trim(),

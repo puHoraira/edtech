@@ -10,6 +10,8 @@ class EnrolledCoursesPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print(studentId);
+    print("-------");
     return Scaffold(
       appBar: AppBar(
         title: const Text('Enrolled Courses'),

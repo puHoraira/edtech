@@ -1,10 +1,10 @@
 import 'package:edtech/screens/instructor/instructor.dart';
+import 'package:edtech/screens/instructor/registration.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import 'package:edtech/homepage.dart';
 class InstructorLoginPage extends StatefulWidget {
   @override
   _InstructorLoginPageState createState() => _InstructorLoginPageState();
@@ -124,10 +124,14 @@ class _InstructorLoginPageState extends State<InstructorLoginPage> {
                                 .doc(userCredential.user!.uid)
                                 .get();
                             String someField = userDoc['userId'].toString();
-                            if (userDoc.exists &&
-                                userDoc['role'] == 'instructor') {
-                              print("object");
-                              context.go('/role-selection/instructor/home?instructorId=$someField');
+                            if (userDoc.exists && userDoc['role'] == 'instructor') {
+                              // Navigate to HomePage directly
+                              Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(builder: (context) => HomePage(role: 'instructor', userId:someField)),
+                                    (route) => false, // Remove all previous routes
+                              );
+
                             } else {
                               throw Exception('Incorrect role');
                             }
@@ -152,7 +156,12 @@ class _InstructorLoginPageState extends State<InstructorLoginPage> {
                     ),
                     SizedBox(height: 20),
                     TextButton(
-                      onPressed: () => context.go('/role-selection/instructor/registration'),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => InstructorRegisterPage()),
+                        );
+                      },
                       child: Text(
                         "Don't have an account? Register here",
                         style: TextStyle(
@@ -225,6 +234,7 @@ class ForgotPasswordPage extends StatelessWidget {
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(content: Text('Password reset email sent!')),
                         );
+                        Navigator.pop(context);
                       } catch (e) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(content: Text('Error: $e')),

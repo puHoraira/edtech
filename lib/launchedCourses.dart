@@ -11,6 +11,7 @@ class LaunchedCoursesPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print(instructorId);
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -165,8 +166,11 @@ class LaunchedCoursesPage extends StatelessWidget {
     );
   }
 
-  String _formatDate(Timestamp timestamp) {
-    final DateTime date = timestamp.toDate();
+  String _formatDate(dynamic timestamp) {
+    if (timestamp == null) {
+      return "Unknown date";
+    }
+    final DateTime date = (timestamp as Timestamp).toDate();
     return "${date.day}/${date.month}/${date.year}";
   }
 }

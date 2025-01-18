@@ -6,8 +6,6 @@ class Instructor {
   final String name;
   final int userId;
   final String expertise;
-   // Map<String, dynamic> additionalInfo;
-   // List<Course> launchedCourses;
 
   Instructor({
     required this.uid,
@@ -37,36 +35,3 @@ class Instructor {
     };
   }
 }
-
-// Instructor({
-//   required this.uid,
-//   required this.email,
-//   required this.name,
-//   required this.userId
-// });
-//
-// factory Instructor.fromMap(Map<String, dynamic> map) {
-// return Instructor(
-// uid: map['uid'],
-// email: map['email'],
-// name: map['name'],
-// userId: map['userId'],
-// additionalInfo: map['additionalInfo'] ?? {},
-// launchedCourses: (map['launchedCourses'] as List<dynamic>?)
-//     ?.map((course) => Course.fromMap(course))
-//     .toList() ??
-// [],
-// );
-// }
-//
-// Map<String, dynamic> toMap() {
-// return {
-// 'uid': uid,
-// 'email': email,
-// 'name': name,
-// 'userId': userId,
-// 'additionalInfo': additionalInfo,
-// 'launchedCourses': launchedCourses.map((course) => course.toMap()).toList(),
-// };
-// }
-// }

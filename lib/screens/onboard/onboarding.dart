@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 
+import '../roleSelection/roleSelection.dart';
+
 class OnboardingPage extends StatefulWidget {
   @override
   _OnboardingPageState createState() => _OnboardingPageState();
@@ -62,9 +64,11 @@ class _OnboardingPageState extends State<OnboardingPage> with SingleTickerProvid
   }
 
   void _goToRoleSelection() {
-    context.go('/role-selection');
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => RoleSelectionPage()),
+    );
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
