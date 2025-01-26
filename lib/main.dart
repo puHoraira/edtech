@@ -65,7 +65,6 @@ class AuthHandler extends StatelessWidget {
         } else if (snapshot.hasData && snapshot.data!.isNotEmpty) {
           final role = snapshot.data!['role']!;
           final userId = snapshot.data!['userId']!;
-          print("ekahnea achi ami");
           print(role);
           print(userId);
 
