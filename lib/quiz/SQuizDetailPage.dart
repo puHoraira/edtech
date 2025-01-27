@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import '../course/StudentCourseDetailPage.dart';
+
 class SQuizDetailPage extends StatelessWidget {
   final String quizId;
   final String studentId;
@@ -347,12 +349,24 @@ class _InteractiveQuizPageState extends State<InteractiveQuizPage> {
           actions: [
             TextButton(
               onPressed: () {
+                // First pop the dialog
                 Navigator.pop(context);
+                // Then pop the InteractiveQuizPage
                 Navigator.pop(context);
+                // Finally, replace the original quiz detail page with a new one
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => SQuizDetailPage(
+                      quizId: widget.quizId,
+                      studentId: widget.studentId,
+                      courseId: widget.courseId,
+                    ),
+                  ),
+                );
               },
               child: const Text('OK'),
-            ),
-          ],
+            ),          ],
         ),
       );
     } catch (e) {

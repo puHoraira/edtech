@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:edtech/course/stuchat.dart';
 import 'package:flutter/material.dart';
 
 import '../document/StuCourseDoc.dart';
@@ -44,6 +45,7 @@ class StudentCourseDetailPage extends StatelessWidget {
           }
 
           final courseData = snapshot.data!;
+          final instructorId = courseData['instructorId'];
           return Padding(
             padding: const EdgeInsets.all(16.0),
             child: SingleChildScrollView(
@@ -73,31 +75,69 @@ class StudentCourseDetailPage extends StatelessWidget {
                   ),
                   const SizedBox(height: 12),
                   _buildQuizzesList(),
-                  const SizedBox(height: 12),
+                  const SizedBox(height: 20),
+
+                  // Documents Section
                   StudentCourseDocuments(courseId: courseId),
                   const SizedBox(height: 20),
 
-                  // Leaderboard Button
+                  // Leaderboard and Chat Buttons
                   Center(
-                    child: ElevatedButton.icon(
-                      onPressed: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => LeaderboardPage(courseId: courseId),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        ElevatedButton.icon(
+                          onPressed: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => LeaderboardPage(courseId: courseId),
+                            ),
+                          ),
+                          icon: const Icon(Icons.leaderboard, color: Colors.white),
+                          label: const Text(
+                            'Leaderboard',
+                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                          ),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.greenAccent,
+                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(25),
+                            ),
+                            elevation: 5,
+                            shadowColor: Colors.green.withOpacity(0.3),
+                          ),
                         ),
-                      ),
-                      icon: const Icon(Icons.leaderboard, color: Colors.white),
-                      label: const Text(
-                        'Leaderboard',
-                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                      ),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.greenAccent,
-                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(25),
+                        const SizedBox(width: 16),
+                        ElevatedButton.icon(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => StudentChatPage(
+                                  studentId: studentId,
+                                  instructorId: instructorId,
+                                  courseTitle: courseData['title'] ?? 'Course',
+                                ),
+                              ),
+                            );
+                          },
+                          icon: const Icon(Icons.chat, color: Colors.white),
+                          label: const Text(
+                            'Chat',
+                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                          ),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.blueAccent,
+                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(25),
+                            ),
+                            elevation: 5,
+                            shadowColor: Colors.blue.withOpacity(0.3),
+                          ),
                         ),
-                      ),
+                      ],
                     ),
                   ),
                 ],
@@ -160,51 +200,53 @@ class StudentCourseDetailPage extends StatelessWidget {
         }
 
         final classes = snapshot.data!.docs;
-        return ListView.builder(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          itemCount: classes.length,
-          itemBuilder: (context, index) {
-            final classData = classes[index];
-            final classTitle = classData['classTitle'] ?? 'Class Title';
-            final classTime = classData['classTime'] ?? 'Time not set';
+        return SingleChildScrollView(
+          child: ListView.builder(
+            shrinkWrap: true, // Allows ListView to take only the space it needs
+            physics: const ClampingScrollPhysics(), // Enables smooth scrolling
+            itemCount: classes.length,
+            itemBuilder: (context, index) {
+              final classData = classes[index];
+              final classTitle = classData['classTitle'] ?? 'Class Title';
+              final classTime = classData['classTime'] ?? 'Time not set';
 
-            return Card(
-              elevation: 6,
-              margin: const EdgeInsets.symmetric(vertical: 10),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: ListTile(
-                leading: const Icon(Icons.video_call, color: Colors.indigo, size: 36),
-                title: Text(
-                  classTitle,
-                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              return Card(
+                elevation: 6,
+                margin: const EdgeInsets.symmetric(vertical: 10),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
                 ),
-                subtitle: Text(
-                  'Scheduled At: $classTime',
-                  style: const TextStyle(color: Colors.grey, fontSize: 14),
-                ),
-                onTap: () {
-                  // Navigate to class details page
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => ClassDetailsPage(
-                        classTitle: classTitle,
-                        classDescription: classData['classDescription'],
-                        classTime: classTime,
-                        maxStudents: classData['maxStudents'].toString(),
-                        enrolledStudents: List<String>.from(classData['enrolledStudents'] ?? []),
-                        formattedDate: classData['createdAt'].toDate().toString(),
-                        conferenceID: classData['conferenceID'],
+                child: ListTile(
+                  leading: const Icon(Icons.video_call, color: Colors.indigo, size: 36),
+                  title: Text(
+                    classTitle,
+                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  subtitle: Text(
+                    'Scheduled At: $classTime',
+                    style: const TextStyle(color: Colors.grey, fontSize: 14),
+                  ),
+                  onTap: () {
+                    // Navigate to class details page
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ClassDetailsPage(
+                          classTitle: classTitle,
+                          classDescription: classData['classDescription'],
+                          classTime: classTime,
+                          maxStudents: classData['maxStudents'].toString(),
+                          enrolledStudents: List<String>.from(classData['enrolledStudents'] ?? []),
+                          formattedDate: classData['createdAt'].toDate().toString(),
+                          conferenceID: classData['conferenceID'],
+                        ),
                       ),
-                    ),
-                  );
-                },
-              ),
-            );
-          },
+                    );
+                  },
+                ),
+              );
+            },
+          ),
         );
       },
     );

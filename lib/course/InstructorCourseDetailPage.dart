@@ -8,6 +8,7 @@ import '../class/launchNewClass.dart';
 import '../quiz/launchNewQuiz.dart';
 import '../class/viewPreviousClasses.dart';
 import '../quiz/viewPreviousQuiz.dart';
+import 'chat.dart';
 
 class CourseDetailPage extends StatelessWidget {
   final String courseId;
@@ -228,78 +229,6 @@ class CourseDetailPage extends StatelessWidget {
       },
     );
   }
-
-  // Widget _buildEnrolledStudentsList() {
-  //   return FutureBuilder<QuerySnapshot>(
-  //     future: FirebaseFirestore.instance
-  //         .collection('enrollment')
-  //         .where('courseId', isEqualTo: courseId)
-  //         .get(),
-  //     builder: (context, studentSnapshot) {
-  //       if (studentSnapshot.connectionState == ConnectionState.waiting) {
-  //         return const Center(child: CircularProgressIndicator());
-  //       }
-  //
-  //       if (!studentSnapshot.hasData || studentSnapshot.data!.docs.isEmpty) {
-  //         return const Center(
-  //           child: Text(
-  //             'No students enrolled.',
-  //             style: TextStyle(fontSize: 18, color: Colors.grey),
-  //           ),
-  //         );
-  //       }
-  //
-  //       final enrolledStudents = studentSnapshot.data!.docs;
-  //       return ListView.builder(
-  //         shrinkWrap: true,
-  //         physics: const NeverScrollableScrollPhysics(),
-  //         itemCount: enrolledStudents.length,
-  //         itemBuilder: (context, index) {
-  //           final student = enrolledStudents[index];
-  //           final studentId = student['studentId'];
-  //
-  //           return FutureBuilder<QuerySnapshot>(
-  //             future: FirebaseFirestore.instance
-  //                 .collection('users')
-  //                 .where('userId', isEqualTo: int.parse(studentId))
-  //                 .get(),
-  //             builder: (context, userSnapshot) {
-  //               if (userSnapshot.connectionState == ConnectionState.waiting) {
-  //                 return const Center(child: CircularProgressIndicator());
-  //               }
-  //
-  //               if (!userSnapshot.hasData || userSnapshot.data!.docs.isEmpty) {
-  //                 return ListTile(
-  //                   title: const Text('Unknown Student'),
-  //                   subtitle: Text('Enrolled on: ${student['enrolledAt'].toDate()}'),
-  //                 );
-  //               }
-  //
-  //               final userData = userSnapshot.data!.docs.first;
-  //               final studentName = userData['displayName'] ?? 'Unknown Student';
-  //
-  //               return Card(
-  //                 elevation: 4,
-  //                 margin: const EdgeInsets.symmetric(vertical: 8),
-  //                 child: ListTile(
-  //                   leading: CircleAvatar(
-  //                     child: Text(
-  //                       studentName[0].toUpperCase(),
-  //                       style: const TextStyle(color: Colors.white),
-  //                     ),
-  //                     backgroundColor: Colors.indigo,
-  //                   ),
-  //                   title: Text(studentName, style: const TextStyle(fontSize: 18)),
-  //                   subtitle: Text('Enrolled on: ${student['enrolledAt'].toDate()}'),
-  //                 ),
-  //               );
-  //             },
-  //           );
-  //         },
-  //       );
-  //     },
-  //   );
-  // }
   Widget _buildEnrolledStudentsList() {
     return FutureBuilder(
       future: FirebaseFirestore.instance
@@ -362,14 +291,40 @@ class CourseDetailPage extends StatelessWidget {
                     ),
                     title: Text(studentName, style: const TextStyle(fontSize: 18)),
                     subtitle: Text('Enrolled on: ${student['enrolledAt'].toDate()}'),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => QuizAttemptsPage(studentId: studentId, courseId: courseId,),
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        IconButton(
+                          icon: Icon(Icons.chat, color: Colors.indigo),
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ChatPage(
+                                  studentId: studentId,
+                                  teacherId: instructorId,
+                                  studentName: studentName,
+                                ),
+                              ),
+                            );
+                          },
                         ),
-                      );
-                    },
+                        IconButton(
+                          icon: Icon(Icons.arrow_forward_ios),
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => QuizAttemptsPage(
+                                  studentId: studentId,
+                                  courseId: courseId,
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ],
+                    ),
                   ),
                 );
               },
@@ -378,8 +333,7 @@ class CourseDetailPage extends StatelessWidget {
         );
       },
     );
-  }
-}
+  }}
 
 class QuizAttemptsPage extends StatelessWidget {
   final String studentId;

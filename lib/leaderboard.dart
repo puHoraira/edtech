@@ -113,50 +113,53 @@ class LeaderboardPage extends StatelessWidget {
         .collection('enrollment')
         .where('courseId', isEqualTo: courseId)
         .get();
-
     // Process each enrolled student
     final leaderboardData = <StudentLeaderboardData>[];
 
     for (var enrollment in enrollmentSnapshot.docs) {
       // Get student details
+
       final studentId = enrollment['studentId'];
       final userSnapshot = await FirebaseFirestore.instance
           .collection('users')
           .where('userId', isEqualTo: int.parse(studentId))
           .limit(1)
           .get();
+      print(studentId);
+      print("--------");
+      if(enrollment.data().containsKey('quizzes')){
+        final quizzes = enrollment['quizzes'] ?? {};
+        if (quizzes.isNotEmpty) {
+          double totalScore = 0;
+          double bestScore = 0;
+          int totalQuizzes = 0;
 
-      // Calculate quiz scores
-      final quizzes = enrollment['quizzes'] ?? {};
+          quizzes.forEach((quizId, quizData) {
+            if (quizData is Map &&
+                quizData['totalQuestions'] != null &&
+                quizData['score'] != null) {
+              final quizPercentage = (quizData['score'] / quizData['totalQuestions'] * 100);
+              totalScore += quizPercentage;
+              bestScore = max(bestScore, quizPercentage);
+              totalQuizzes++;
+            }
+          });
 
-      if (quizzes.isNotEmpty) {
-        double totalScore = 0;
-        double bestScore = 0;
-        int totalQuizzes = 0;
+          double averageScore2 = totalQuizzes > 0 ? totalScore / totalQuizzes : 0;
 
-        quizzes.forEach((quizId, quizData) {
-          if (quizData is Map &&
-              quizData['totalQuestions'] != null &&
-              quizData['score'] != null) {
-            final quizPercentage = (quizData['score'] / quizData['totalQuestions'] * 100);
-            totalScore += quizPercentage;
-            bestScore = max(bestScore, quizPercentage);
-            totalQuizzes++;
-          }
-        });
-
-        double averageScore2 = totalQuizzes > 0 ? totalScore / totalQuizzes : 0;
-
-        leaderboardData.add(
-            StudentLeaderboardData(
-              name: userSnapshot.docs.isNotEmpty
-                  ? userSnapshot.docs.first['displayName']
-                  : 'Unknown Student',
-              averageScore: averageScore2,
-              totalQuizzes: totalQuizzes,
-              bestScore: bestScore,
-            )
-        );
+          leaderboardData.add(
+              StudentLeaderboardData(
+                name: userSnapshot.docs.isNotEmpty
+                    ? userSnapshot.docs.first['displayName']
+                    : 'Unknown Student',
+                averageScore: averageScore2,
+                totalQuizzes: totalQuizzes,
+                bestScore: bestScore,
+              )
+          );
+        }
+      }else{
+        leaderboardData.add(StudentLeaderboardData(name: userSnapshot.docs.isNotEmpty? userSnapshot.docs.first['displayName']:'Unknown Student', averageScore: 0, totalQuizzes: 0, bestScore: 0));
       }
     }
 
