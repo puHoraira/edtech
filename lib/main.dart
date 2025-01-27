@@ -1,89 +1,78 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-import './screens/onboard/onboarding.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'firebase_options.dart';
-import 'homepage.dart';
-import 'screens/roleSelection/roleSelection.dart';
-import 'screens/student/registration.dart';
-import 'screens/instructor/registration.dart';
-import 'screens/instructor/login.dart';
-import 'screens/student/login.dart';
+import './screens/onboard/onboarding.dart';
+import './homepage.dart';
 
 void main() async {
-  try {
-    WidgetsFlutterBinding.ensureInitialized();
-
-    print('Initializing Firebase...'); // Debug print
-    await Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform,
-    );
-    print('Firebase initialized successfully'); // Debug print
-
-    // Configure Firebase Storage without await
-    FirebaseStorage.instance.setMaxUploadRetryTime(const Duration(seconds: 5));
-    print('Firebase Storage configured'); // Debug print
-    print("Stat");
-    runApp(MyApp());
-  } catch (e) {
-    print('Error in initialization: $e'); // Debug print
-  }
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  final GoRouter _router = GoRouter(
-    initialLocation: '/',
-    routes: [
-      GoRoute(
-        path: '/',
-        builder: (context, state) => OnboardingPage(),
-      ),
-      GoRoute(
-        path: '/role-selection',
-        builder: (context, state) => RoleSelectionPage(),
-        routes: [
-          GoRoute(
-            path: 'student',
-            builder: (context, state) => StudentLoginPage(),
-            routes: [
-              GoRoute(
-                path: 'registration',
-                builder: (context, state) => StudentRegisterPage(),
-              ),
-              GoRoute(
-                path: 'home',
-                builder: (context, state) => HomePage(role: "student"),
-              ),
-            ],
-          ),
-          GoRoute(
-            path: 'instructor',
-            builder: (context, state) => InstructorLoginPage(),
-            routes: [
-              GoRoute(
-                path: 'registration',
-                builder: (context, state) => InstructorRegisterPage(),
-              ),
-              GoRoute(
-                path: 'home',
-                builder: (context, state) => HomePage(role: "instructor"),
-              ),
-            ],
-          ),
-        ],
-      ),
-    ],
-  );
-
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      title: 'Study App',
-      routerConfig: _router,
+    return MaterialApp(
+      title: 'EdTech',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
+      home: AuthHandler(), // Redirect logic based on user login status
+    );
+  }
+}
+
+class AuthHandler extends StatelessWidget {
+
+  Future<Map<String, String>> getUserRoleAndId() async {
+    User? user = FirebaseAuth.instance.currentUser;
+    print(user);
+
+    if (user != null) {
+      // Fetch user details from Firestore
+      DocumentSnapshot userDoc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .get();
+
+      if (userDoc.exists) {
+        // Convert `userId` to String if stored as a number
+        String role = userDoc['role'];
+        String userId = userDoc['userId'].toString(); // Ensure `userId` is a String
+        print("ekahnea achi ami2");
+        print(role);
+        print(userId);
+        return {'role': role, 'userId': userId};
+      }
+    }
+
+    return {}; // Return an empty map if no user is logged in
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    print("ekio");
+    return FutureBuilder<Map<String, String>>(
+      future: getUserRoleAndId(),
+      builder: (context, snapshot) {
+
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(child: CircularProgressIndicator());
+        } else if (snapshot.hasData && snapshot.data!.isNotEmpty) {
+          final role = snapshot.data!['role']!;
+          final userId = snapshot.data!['userId']!;
+          print(role);
+          print(userId);
+
+          return HomePage(role: role, userId: userId); // Pass role and userId to HomePage
+        } else {
+          return OnboardingPage(); // Redirect to onboarding if no user is logged in
+        }
+      },
     );
   }
 }

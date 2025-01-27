@@ -62,8 +62,8 @@ class _StudentProfilePageState extends State<StudentProfilePage> {
       try {
         await FirebaseFirestore.instance.collection('users').doc(user.uid).update({
           'email': _emailController.text.trim(),
-          'fullName': _fullNameController.text.trim(),
-          'grade': _gradeController.text.trim(),  // Update grade field
+          'displayName': _fullNameController.text.trim(),
+          'gradeLevel': _gradeController.text.trim(),  // Update grade field
         });
 
         setState(() {

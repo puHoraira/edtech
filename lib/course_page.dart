@@ -135,53 +135,73 @@ class _CoursesPageState extends State<CoursesPage> {
   }
 
   Widget _buildCourseList(List<QueryDocumentSnapshot> courses) {
-    return ListView.builder(
-      itemCount: courses.length,
-      itemBuilder: (context, index) {
-        final course = courses[index];
-        final courseId = course.id;
-        final title = course['title'] ?? 'Untitled Course';
-        final description = course['description'] ?? 'No description provided';
-        final instructorId = course['instructorId'].toString();
+    return FutureBuilder<List<Map<String, dynamic>>>(
+      future: _loadAllInstructorDetails(courses),
+      builder: (context, instructorsSnapshot) {
+        if (instructorsSnapshot.connectionState == ConnectionState.waiting) {
+          return _buildLoading();
+        }
 
-        return FutureBuilder<Map<String, dynamic>>(
-          future: _getInstructorDetails(instructorId),
-          builder: (context, instructorSnapshot) {
-            if (instructorSnapshot.connectionState == ConnectionState.waiting) {
+        return FutureBuilder<List<int>>(
+          future: _loadAllEnrollmentCounts(courses),
+          builder: (context, enrollmentsSnapshot) {
+            if (enrollmentsSnapshot.connectionState == ConnectionState.waiting) {
               return _buildLoading();
             }
 
-            if (instructorSnapshot.hasData) {
-              final instructorName = instructorSnapshot.data!['displayName'] ?? 'Unknown Instructor';
+            return ListView.builder(
+              itemCount: courses.length,
+              itemBuilder: (context, index) {
+                final course = courses[index];
+                final courseId = course.id;
+                final title = course['title'] ?? 'Untitled Course';
+                final description = course['description'] ?? 'No description provided';
 
-              return FutureBuilder<int>(
-                future: _getEnrolledStudentCount(courseId),
-                builder: (context, enrollmentSnapshot) {
-                  if (enrollmentSnapshot.connectionState == ConnectionState.waiting) {
-                    return _buildLoading();
-                  }
+                final instructorName = instructorsSnapshot.data?[index]['displayName'] ?? 'Unknown Instructor';
+                final enrolledCount = enrollmentsSnapshot.data?[index] ?? 0;
 
-                  if (enrollmentSnapshot.hasData) {
-                    final enrolledCount = enrollmentSnapshot.data!;
-                    return _buildCourseCard(
-                      title: title,
-                      instructorName: instructorName,
-                      description: description,
-                      enrolledCount: enrolledCount,
-                      courseId: courseId,
-                    );
-                  }
-
-                  return Container();
-                },
-              );
-            }
-
-            return Container();
+                return _buildCourseCard(
+                  title: title,
+                  instructorName: instructorName,
+                  description: description,
+                  enrolledCount: enrolledCount,
+                  courseId: courseId,
+                );
+              },
+            );
           },
         );
       },
     );
+  }
+
+  Future<List<Map<String, dynamic>>> _loadAllInstructorDetails(List<QueryDocumentSnapshot> courses) async {
+    final instructorIds = courses.map((course) => int.parse(course['instructorId'].toString())).toList();
+
+    final instructorSnapshots = await Future.wait(
+        instructorIds.map((id) => FirebaseFirestore.instance
+            .collection('users')
+            .where('userId', isEqualTo: id)
+            .limit(1)
+            .get())
+    );
+
+    return instructorSnapshots.map((snapshot) =>
+    snapshot.docs.isNotEmpty ? snapshot.docs.first.data() : {'displayName': 'Unknown Instructor'}
+    ).toList();
+  }
+
+  Future<List<int>> _loadAllEnrollmentCounts(List<QueryDocumentSnapshot> courses) async {
+    final courseIds = courses.map((course) => course.id).toList();
+
+    final enrollmentSnapshots = await Future.wait(
+        courseIds.map((courseId) => FirebaseFirestore.instance
+            .collection('enrollment')
+            .where('courseId', isEqualTo: courseId)
+            .get())
+    );
+
+    return enrollmentSnapshots.map((snapshot) => snapshot.docs.length).toList();
   }
 
   Widget _buildCourseCard({

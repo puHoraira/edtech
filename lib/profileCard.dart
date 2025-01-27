@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-
+import 'package:edtech/screens/roleSelection/roleSelection.dart';
 class ProfileBody extends StatelessWidget {
   final String displayName;
   final String role;
@@ -60,7 +57,7 @@ class ProfileBody extends StatelessWidget {
               child: ElevatedButton.icon(
                 onPressed: () async {
                   await FirebaseAuth.instance.signOut();
-                  context.go('/role-selection');
+                  Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => RoleSelectionPage()), (route)=>false);
                 },
                 icon: Icon(Icons.logout),
                 label: Text('Log Out'),

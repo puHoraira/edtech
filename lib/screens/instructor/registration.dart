@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -136,7 +135,9 @@ class _InstructorRegisterPageState extends State<InstructorRegisterPage> {
 
                           await userCredential.user?.sendEmailVerification();
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Registration successful!')));
-                          context.go('/role-selection/instructor');
+
+                          // Navigate back to the previous screen
+                          Navigator.pop(context);
                         } catch (e) {
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Registration failed: $e')));
                         }

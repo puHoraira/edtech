@@ -40,7 +40,7 @@ dependencies:
   firebase_auth: ^5.3.4
   uuid: ^4.5.1
   url_launcher: ^6.3.1
-  shared_preferences: ^2.3.4
+  shared_preferences: ^2.3.5
   firebase_storage: ^12.3.7
   file_picker: ^8.1.7
   dio: ^5.7.0
@@ -57,6 +57,11 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^4.0.0
+  flutter_launcher_icons: "^0.14.3"
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/icon/icon1.png"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

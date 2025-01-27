@@ -36,7 +36,6 @@ class _LaunchNewCoursePageState extends State<LaunchNewCoursePage> {
       });
 
       try {
-        // Step 1: Fetch the most recent course document to get the last ID
         final querySnapshot = await FirebaseFirestore.instance
             .collection('courses')
             .orderBy('createdAt', descending: true)
@@ -45,22 +44,20 @@ class _LaunchNewCoursePageState extends State<LaunchNewCoursePage> {
 
         String courseId;
         if (querySnapshot.docs.isEmpty) {
-          // If no courses exist, start with a base ID like "course1"
           courseId = 'course1';
         } else {
-          // Step 2: Get the last course ID and increment it
           final lastCourseId = querySnapshot.docs.first.id;
-          final lastIdNumber = int.tryParse(lastCourseId.replaceAll(RegExp(r'[^0-9]'), ''));
+          final lastIdNumber = int.tryParse(
+              lastCourseId.replaceAll(RegExp(r'[^0-9]'), ''));
 
           if (lastIdNumber != null) {
-            // Increment the last course ID number
             courseId = 'course${lastIdNumber + 1}';
           } else {
-            courseId = 'course1'; // Fallback if parsing fails
+            courseId = 'course1';
           }
         }
-
-        // Step 3: Save the course with the generated courseId
+        print("------------");
+        print(FieldValue.serverTimestamp());
         await FirebaseFirestore.instance.collection('courses').doc(courseId).set({
           'courseId': courseId,
           'title': _titleController.text.trim(),
@@ -108,6 +105,8 @@ class _LaunchNewCoursePageState extends State<LaunchNewCoursePage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Launch New Course"),
+        centerTitle: true,
+        backgroundColor: Colors.indigo,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -118,12 +117,10 @@ class _LaunchNewCoursePageState extends State<LaunchNewCoursePage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // Course Title
-                TextFormField(
+                _buildSectionTitle("Course Title"),
+                _buildTextField(
                   controller: _titleController,
-                  decoration: const InputDecoration(
-                    labelText: "Course Title",
-                    border: OutlineInputBorder(),
-                  ),
+                  hint: "Enter course title",
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return "Please enter the course title";
@@ -132,13 +129,12 @@ class _LaunchNewCoursePageState extends State<LaunchNewCoursePage> {
                   },
                 ),
                 const SizedBox(height: 16),
+
                 // Course Description
-                TextFormField(
+                _buildSectionTitle("Course Description"),
+                _buildTextField(
                   controller: _descriptionController,
-                  decoration: const InputDecoration(
-                    labelText: "Course Description",
-                    border: OutlineInputBorder(),
-                  ),
+                  hint: "Enter course description",
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return "Please enter the course description";
@@ -148,13 +144,12 @@ class _LaunchNewCoursePageState extends State<LaunchNewCoursePage> {
                   maxLines: 4,
                 ),
                 const SizedBox(height: 16),
+
                 // Course Price
-                TextFormField(
+                _buildSectionTitle("Course Price (\$)"),
+                _buildTextField(
                   controller: _priceController,
-                  decoration: const InputDecoration(
-                    labelText: "Course Price (\$)",
-                    border: OutlineInputBorder(),
-                  ),
+                  hint: "Enter course price",
                   keyboardType: TextInputType.number,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -167,19 +162,15 @@ class _LaunchNewCoursePageState extends State<LaunchNewCoursePage> {
                   },
                 ),
                 const SizedBox(height: 16),
+
                 // Topics Covered
-                Text(
-                  "Topics Covered",
-                  style: Theme.of(context).textTheme.titleMedium,
-                ),
+                _buildSectionTitle("Topics Covered"),
                 Row(
                   children: [
                     Expanded(
-                      child: TextFormField(
+                      child: _buildTextField(
                         controller: _topicController,
-                        decoration: const InputDecoration(
-                          hintText: "Add a topic",
-                        ),
+                        hint: "Add a topic",
                       ),
                     ),
                     IconButton(
@@ -206,11 +197,9 @@ class _LaunchNewCoursePageState extends State<LaunchNewCoursePage> {
                       .toList(),
                 ),
                 const SizedBox(height: 16),
+
                 // Course Features
-                Text(
-                  "Course Features",
-                  style: Theme.of(context).textTheme.titleMedium,
-                ),
+                _buildSectionTitle("Course Features"),
                 Column(
                   children: _courseFeatures.asMap().entries.map((entry) {
                     final index = entry.key;
@@ -227,22 +216,69 @@ class _LaunchNewCoursePageState extends State<LaunchNewCoursePage> {
                   }).toList(),
                 ),
                 const SizedBox(height: 24),
+
                 // Launch Button
                 _isLoading
                     ? const Center(child: CircularProgressIndicator())
-                    : ElevatedButton(
-                  onPressed: _launchCourse,
-                  style: ElevatedButton.styleFrom(
-                    minimumSize: const Size(double.infinity, 50),
-                    backgroundColor: Colors.indigo,
+                    : SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: _launchCourse,
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      backgroundColor: Colors.lightGreen,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                    child: const Text(
+                      "Launch Course",
+                      style: TextStyle(fontSize: 16),
+                    ),
                   ),
-                  child: const Text("Launch Course"),
                 ),
               ],
             ),
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildSectionTitle(String title) {
+    return Text(
+      title,
+      style: const TextStyle(
+        fontSize: 16,
+        fontWeight: FontWeight.bold,
+        color: Colors.indigo,
+      ),
+    );
+  }
+
+  Widget _buildTextField({
+    required TextEditingController controller,
+    required String hint,
+    String? Function(String?)? validator,
+    TextInputType? keyboardType,
+    int maxLines = 1,
+  }) {
+    return TextFormField(
+      controller: controller,
+      keyboardType: keyboardType,
+      maxLines: maxLines,
+      decoration: InputDecoration(
+        hintText: hint,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderSide: const BorderSide(color: Colors.indigo),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      ),
+      validator: validator,
     );
   }
 }

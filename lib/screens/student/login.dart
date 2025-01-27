@@ -1,7 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:edtech/screens/student/registration.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:edtech/homepage.dart';
 
 class StudentLoginPage extends StatefulWidget {
   @override
@@ -121,9 +122,14 @@ class _StudentLoginPageState extends State<StudentLoginPage> {
                                 .collection('users')
                                 .doc(userCredential.user!.uid)
                                 .get();
-                            String someField = userDoc['userId'].toString();
+                            String userId = userDoc['userId'].toString();
                             if (userDoc.exists && userDoc['role'] == 'student') {
-                              context.go('/role-selection/student/home?studentId=$someField');
+                              Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(builder: (context) => HomePage(role: 'student', userId: userId)),
+                                    (route) => false, // Remove all previous routes
+                              );
+
                             } else {
                               throw Exception('Incorrect role');
                             }
@@ -148,7 +154,12 @@ class _StudentLoginPageState extends State<StudentLoginPage> {
                     ),
                     SizedBox(height: 20),
                     TextButton(
-                      onPressed: () => context.go('/role-selection/student/registration'),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => StudentRegisterPage()),
+                        );
+                      },
                       child: Text(
                         "Don't have an account? Register here",
                         style: TextStyle(
@@ -221,6 +232,7 @@ class ForgotPasswordPage extends StatelessWidget {
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(content: Text('Password reset email sent!')),
                         );
+                        Navigator.pop(context);
                       } catch (e) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(content: Text('Error: $e')),
