@@ -128,6 +128,7 @@ class CourseDetailPage extends StatelessWidget {
                       ElevatedButton(
                         onPressed: () async {
                           // Check if the user is already enrolled
+
                           final enrolledCourses = await FirebaseFirestore.instance
                               .collection('enrollment')
                               .where('studentId', isEqualTo: userId)
@@ -136,6 +137,7 @@ class CourseDetailPage extends StatelessWidget {
 
                           if (enrolledCourses.docs.isEmpty) {
                             // Enroll in the course by adding the student info to the 'enrollment' collection
+                            //ekhane edit koro
                             await FirebaseFirestore.instance.collection('enrollment').add({
                               'studentId': userId,
                               'courseId': courseId,

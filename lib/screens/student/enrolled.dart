@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import '../../StudentCourseDetailPage.dart';
+import '../../course/StudentCourseDetailPage.dart';
 
 class EnrolledCoursesPage extends StatelessWidget {
   final String studentId; // Pass the student's ID

@@ -1,9 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-import 'SQuizDetailPage.dart';
-import 'StuCourseDoc.dart';
-import 'classDetailPage.dart';
+import '../document/StuCourseDoc.dart';
+import '../class/classDetailPage.dart';
+import '../leaderboard.dart';
+import '../quiz/SQuizDetailPage.dart';
 
 class StudentCourseDetailPage extends StatelessWidget {
   final String courseId;
@@ -51,30 +52,54 @@ class StudentCourseDetailPage extends StatelessWidget {
                 children: [
                   // Course Details Card
                   _buildCourseCard(courseData),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 20),
 
                   // Available Classes Section
                   const Text(
                     'Available Classes',
                     style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
                   ),
-                  const SizedBox(height: 8),
-                  // Use a Container with a fixed height or make it scrollable
+                  const SizedBox(height: 12),
                   SizedBox(
-                    height: 200, // Adjust height as necessary
+                    height: 220,
                     child: _buildClassesList(),
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 20),
 
                   // Available Quizzes Section
                   const Text(
                     'Quizzes',
                     style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
                   ),
-                  const SizedBox(height: 8),
+                  const SizedBox(height: 12),
                   _buildQuizzesList(),
-                  const SizedBox(height: 8),
-                  StudentCourseDocuments(courseId: courseId)
+                  const SizedBox(height: 12),
+                  StudentCourseDocuments(courseId: courseId),
+                  const SizedBox(height: 20),
+
+                  // Leaderboard Button
+                  Center(
+                    child: ElevatedButton.icon(
+                      onPressed: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => LeaderboardPage(courseId: courseId),
+                        ),
+                      ),
+                      icon: const Icon(Icons.leaderboard, color: Colors.white),
+                      label: const Text(
+                        'Leaderboard',
+                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.greenAccent,
+                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(25),
+                        ),
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -83,6 +108,7 @@ class StudentCourseDetailPage extends StatelessWidget {
       ),
     );
   }
+
   Widget _buildCourseCard(DocumentSnapshot courseData) {
     return Card(
       elevation: 8,
@@ -90,7 +116,7 @@ class StudentCourseDetailPage extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(20.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -112,6 +138,7 @@ class StudentCourseDetailPage extends StatelessWidget {
       ),
     );
   }
+
   Widget _buildClassesList() {
     return FutureBuilder<QuerySnapshot>(
       future: FirebaseFirestore.instance
@@ -140,25 +167,23 @@ class StudentCourseDetailPage extends StatelessWidget {
           itemBuilder: (context, index) {
             final classData = classes[index];
             final classTitle = classData['classTitle'] ?? 'Class Title';
-            final classDescription = classData['classDescription'] ?? 'Description not available';
             final classTime = classData['classTime'] ?? 'Time not set';
-            final maxStudents = classData['maxStudents'].toString() ?? 'No limit';
-            final enrolledStudents = List<String>.from(classData['enrolledStudents'] ?? []);
-            final formattedDate = classData['createdAt'].toDate().toString();
-            final meetingID = classData['conferenceID'];
 
             return Card(
-              elevation: 4,
-              margin: const EdgeInsets.symmetric(vertical: 8),
+              elevation: 6,
+              margin: const EdgeInsets.symmetric(vertical: 10),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
               child: ListTile(
-                leading: const Icon(Icons.video_call, color: Colors.indigo),
+                leading: const Icon(Icons.video_call, color: Colors.indigo, size: 36),
                 title: Text(
                   classTitle,
-                  style: const TextStyle(fontSize: 18),
+                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
                 subtitle: Text(
-                  'Scheduled At: ${classData['classTime']}',
-                  style: const TextStyle(color: Colors.grey),
+                  'Scheduled At: $classTime',
+                  style: const TextStyle(color: Colors.grey, fontSize: 14),
                 ),
                 onTap: () {
                   // Navigate to class details page
@@ -167,12 +192,12 @@ class StudentCourseDetailPage extends StatelessWidget {
                     MaterialPageRoute(
                       builder: (context) => ClassDetailsPage(
                         classTitle: classTitle,
-                        classDescription: classDescription,
+                        classDescription: classData['classDescription'],
                         classTime: classTime,
-                        maxStudents: maxStudents,
-                        enrolledStudents: enrolledStudents,
-                        formattedDate: formattedDate,
-                        conferenceID: meetingID,
+                        maxStudents: classData['maxStudents'].toString(),
+                        enrolledStudents: List<String>.from(classData['enrolledStudents'] ?? []),
+                        formattedDate: classData['createdAt'].toDate().toString(),
+                        conferenceID: classData['conferenceID'],
                       ),
                     ),
                   );
@@ -213,23 +238,26 @@ class StudentCourseDetailPage extends StatelessWidget {
           itemBuilder: (context, index) {
             final quiz = quizzes[index];
             return Card(
-              elevation: 4,
-              margin: const EdgeInsets.symmetric(vertical: 8),
+              elevation: 6,
+              margin: const EdgeInsets.symmetric(vertical: 10),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
               child: ListTile(
-                leading: const Icon(Icons.quiz, color: Colors.indigo),
+                leading: const Icon(Icons.quiz, color: Colors.indigo, size: 36),
                 title: Text(
                   quiz['title'] ?? 'Quiz Title',
-                  style: const TextStyle(fontSize: 18),
+                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
                 subtitle: Text(
                   'Created At: ${quiz['createdAt'].toDate()}',
-                  style: const TextStyle(color: Colors.grey),
+                  style: const TextStyle(color: Colors.grey, fontSize: 14),
                 ),
                 onTap: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => SQuizDetailPage(quizId: quiz.id, studentId: studentId, courseId: courseId,),
+                      builder: (context) => SQuizDetailPage(quizId: quiz.id, studentId: studentId, courseId: courseId),
                     ),
                   );
                 },
@@ -240,9 +268,4 @@ class StudentCourseDetailPage extends StatelessWidget {
       },
     );
   }
-
-
 }
-
-
-

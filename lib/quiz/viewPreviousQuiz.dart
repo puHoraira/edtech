@@ -1,4 +1,4 @@
-import 'package:edtech/quizDet.dart';
+import 'package:edtech/quiz/quizDet.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
