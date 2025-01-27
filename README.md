@@ -5,6 +5,8 @@ Project about Online Education App (EdTech)
 
 Date: 29/12/2024
 Project for second semester second year android lab course
+g
+Instructor: Fahim Arefn Sir, Lecturer, Computer Science and Engineering, University of Dhaka
 ## Getting Started
 
 # commands
