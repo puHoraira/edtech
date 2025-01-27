@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:convert';
+import 'package:get/get.dart';
+import 'package:uddoktapay/models/customer_model.dart';
+import 'package:uddoktapay/models/request_response.dart';
+import 'package:uddoktapay/uddoktapay.dart';
 
 class CourseDetailPage extends StatelessWidget {
   final String courseId;
@@ -127,8 +132,6 @@ class CourseDetailPage extends StatelessWidget {
                     if (isStudent)
                       ElevatedButton(
                         onPressed: () async {
-                          // Check if the user is already enrolled
-
                           final enrolledCourses = await FirebaseFirestore.instance
                               .collection('enrollment')
                               .where('studentId', isEqualTo: userId)
@@ -136,24 +139,45 @@ class CourseDetailPage extends StatelessWidget {
                               .get();
 
                           if (enrolledCourses.docs.isEmpty) {
-                            // Enroll in the course by adding the student info to the 'enrollment' collection
-                            //ekhane edit koro
-                            await FirebaseFirestore.instance.collection('enrollment').add({
-                              'studentId': userId,
-                              'courseId': courseId,
-                              'title': title,
-                              'enrolledAt': FieldValue.serverTimestamp(),
-                            });
-                            print(userId);
-                            // Also, update the 'courses' collection to include this student in 'enrolledStudents'
-                            await FirebaseFirestore.instance.collection('courses').doc(courseId).update({
-                              'enrolledStudents': FieldValue.arrayUnion([userId]), // Add userId to enrolledStudents array
-                            });
-
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text('Enrolled successfully!')),
+                            // UddoktaPay payment logic
+                            final response = await UddoktaPay.createPayment(
+                              context: context,
+                              customer: CustomerDetails(
+                                fullName: 'Your Name', // Replace with actual user's name
+                                email: 'youremail@example.com', // Replace with actual user's email
+                              ),
+                              amount: coursePrice.toString(), // Use the price fetched from Firestore
                             );
-                            Navigator.pop(context);
+
+                            if (response.status == ResponseStatus.completed) {
+                              print('Payment completed, Trx ID: ${response.transactionId}');
+                              print(response.senderNumber);
+
+                              // Enroll in the course upon successful payment
+                              await FirebaseFirestore.instance.collection('enrollment').add({
+                                'studentId': userId,
+                                'courseId': courseId,
+                                'title': title,
+                                'enrolledAt': FieldValue.serverTimestamp(),
+                              });
+
+                              await FirebaseFirestore.instance.collection('courses').doc(courseId).update({
+                                'enrolledStudents': FieldValue.arrayUnion([userId]),
+                              });
+
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(content: Text('Enrolled successfully!')),
+                              );
+                              Navigator.pop(context);
+                            } else if (response.status == ResponseStatus.canceled) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(content: Text('Payment canceled.')),
+                              );
+                            } else if (response.status == ResponseStatus.pending) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(content: Text('Payment pending. Please wait.')),
+                              );
+                            }
                           } else {
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(content: Text('Already enrolled in this course.')),
