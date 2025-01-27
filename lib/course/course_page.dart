@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'courseDetail.dart';
+import '../course/courseDetail.dart';
 
 class CoursesPage extends StatefulWidget {
   final String userId; // userId is a String

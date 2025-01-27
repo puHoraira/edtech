@@ -2,8 +2,8 @@ import 'package:edtech/screens/instructor/profile.dart';
 import 'package:edtech/screens/student/enrolled.dart';
 import 'package:edtech/screens/student/profile.dart';
 import 'package:flutter/material.dart';
-import 'course_page.dart';
-import 'launchedCourses.dart';
+import 'course/course_page.dart';
+import 'course/launchedCourses.dart';
 
 class HomePage extends StatefulWidget {
   final String role;

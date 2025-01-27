@@ -1,4 +1,4 @@
-import '../../course.dart';
+import '../../course/course.dart';
 
 class Instructor {
   final String uid;

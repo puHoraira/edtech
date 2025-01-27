@@ -3,6 +3,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dio/dio.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:open_file/open_file.dart';
+import 'dart:io';
+import 'package:path/path.dart' as path;
+
 
 class StudentCourseDocuments extends StatefulWidget {
   final String courseId;
@@ -16,14 +19,46 @@ class StudentCourseDocuments extends StatefulWidget {
 class _StudentCourseDocumentsState extends State<StudentCourseDocuments> {
   final Map<String, bool> downloadedFiles = {};
 
+  @override
+  void initState() {
+    super.initState();
+    loadDownloadedFiles();
+  }
+
+  // Load downloaded files from local storage
+  Future<void> loadDownloadedFiles() async {
+    final directory = await getApplicationDocumentsDirectory();
+
+    // List all files in the documents directory
+    final files = directory.listSync();
+    for (var file in files) {
+      if (file is File) {
+        setState(() {
+          downloadedFiles[path.basename(file.path)] = true;
+        });
+      }
+    }
+  }
+
   Future<void> downloadDocument(BuildContext context, String url, String fileName) async {
     try {
       final dio = Dio();
       final directory = await getApplicationDocumentsDirectory();
       final filePath = '${directory.path}/$fileName';
+      final file = File(filePath);
 
+      // Check if the file already exists locally
+      if (await file.exists()) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('$fileName has already been downloaded')),
+        );
+        return; // File already exists, no need to download again
+      }
+
+      // Proceed with downloading the file
       await dio.download(url, filePath);
 
+      // Mark the file as downloaded
       setState(() {
         downloadedFiles[fileName] = true;
       });

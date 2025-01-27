@@ -8,6 +8,7 @@ import '../instructor/login.dart';
 import '../student/login.dart';
 import 'aboutUs.dart';
 import 'contactUs.dart';
+import 'howto.dart';
 
 class RoleSelectionPage extends StatelessWidget {
   @override
@@ -151,6 +152,17 @@ class RoleSelectionPage extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                           builder: (context) => TermsAndConditionsPage(),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 15,),
+                    FeatureButton(
+                      title: 'How To Use',
+                      icon: Icons.how_to_reg,
+                      onPressed: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => HowToUsePage(),
                         ),
                       ),
                     ),

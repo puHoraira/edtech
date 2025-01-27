@@ -23,6 +23,29 @@ class CourseDocumentsSection extends StatefulWidget {
 class _CourseDocumentsSectionState extends State<CourseDocumentsSection> {
   final Map<String, bool> downloadedFiles = {};
 
+  @override
+  void initState() {
+    super.initState();
+    loadDownloadedFiles();
+  }
+
+  // Load downloaded files from local storage
+  Future<void> loadDownloadedFiles() async {
+    final directory = await getApplicationDocumentsDirectory();
+
+    // List all files in the documents directory
+    final files = directory.listSync();
+    for (var file in files) {
+      if (file is File) {
+        setState(() {
+          print(path.basename(file.path));
+          print("------------------------");
+          downloadedFiles[path.basename(file.path)] = true;
+        });
+      }
+    }
+  }
+
   Future<void> uploadDocument(BuildContext context) async {
     try {
       // Pick file
@@ -71,13 +94,11 @@ class _CourseDocumentsSectionState extends State<CourseDocumentsSection> {
         // Update Firestore to add the document metadata
         final courseRef = FirebaseFirestore.instance.collection('courses').doc(widget.courseId);
         await courseRef.update({
-          'files': FieldValue.arrayUnion([
-            {
-              'name': fileName,
-              'url': downloadUrl,
-              'uploadedAt': Timestamp.now(),
-            }
-          ]),
+          'files': FieldValue.arrayUnion([{
+            'name': fileName,
+            'url': downloadUrl,
+            'uploadedAt': Timestamp.now(),
+          }]),
         });
 
         // Close the progress dialog
@@ -100,10 +121,20 @@ class _CourseDocumentsSectionState extends State<CourseDocumentsSection> {
 
   Future<void> downloadDocument(BuildContext context, String url, String fileName) async {
     try {
-      final dio = Dio();
       final directory = await getApplicationDocumentsDirectory();
       final filePath = '${directory.path}/$fileName';
+      final file = File(filePath);
 
+      // Check if the file already exists locally
+      if (await file.exists()) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('$fileName has already been downloaded')),
+        );
+        return; // File already exists, no need to download again
+      }
+
+      // Proceed with downloading the file
+      final dio = Dio();
       await dio.download(url, filePath);
 
       // Mark the file as downloaded

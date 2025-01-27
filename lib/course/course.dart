@@ -1,7 +1,7 @@
-import 'package:edtech/quiz.dart';
+import 'package:edtech/quiz/quiz.dart';
 import 'package:edtech/screens/student/student.dart';
 
-import 'screens/instructor/instructor.dart';
+import '../screens/instructor/instructor.dart';
 
 class Course {
   final String courseId;
