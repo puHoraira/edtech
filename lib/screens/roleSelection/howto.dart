@@ -7,7 +7,7 @@ class HowToUsePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('How to Use'),
+        title: const Text('How to Use', style: TextStyle(color: Colors.white),),
         backgroundColor: Colors.blue,
       ),
       body: Padding(

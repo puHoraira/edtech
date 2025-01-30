@@ -12,7 +12,7 @@ class QuizDetailsPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text(
           'Quiz Details',
-          style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+          style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.white),
         ),
         backgroundColor: Colors.indigo,
         centerTitle: true,

@@ -62,7 +62,7 @@ class _ChatPageState extends State<ChatPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Chat with ${widget.studentName}'),
+        title: Text('Chat with ${widget.studentName}', style: TextStyle(color: Colors.white),),
         backgroundColor: Colors.indigo,
       ),
       body: Column(
@@ -164,5 +164,3 @@ class _ChatPageState extends State<ChatPage> {
     );
   }
 }
-
-// Modified _buildEnrolledStudentsList() method in CourseDetailPage

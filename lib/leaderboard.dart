@@ -12,7 +12,7 @@ class LeaderboardPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Course Leaderboard'),
+        title: const Text('Course Leaderboard', style: TextStyle(color: Colors.white),),
         backgroundColor: Colors.indigo,
       ),
       body: FutureBuilder<List<StudentLeaderboardData>>(
@@ -163,7 +163,6 @@ class LeaderboardPage extends StatelessWidget {
       }
     }
 
-    // Sort by average score in descending order
     leaderboardData.sort((a, b) => b.averageScore.compareTo(a.averageScore));
 
     return leaderboardData;

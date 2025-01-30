@@ -27,7 +27,7 @@ class CourseDetailPage extends StatelessWidget {
         backgroundColor: Colors.indigo,
         title: const Text(
           'Course Details',
-          style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+          style: TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
       ),
@@ -345,7 +345,7 @@ class QuizAttemptsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Quiz Attempts'),
+        title: const Text('Quiz Attempts', style: TextStyle(color: Colors.white),),
         centerTitle: true,
         backgroundColor: Colors.blueAccent,
       ),

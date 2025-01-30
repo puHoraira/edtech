@@ -19,7 +19,7 @@ class _InstructorLoginPageState extends State<InstructorLoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Instructor Login'),
+        title: Text('Instructor Login', style: TextStyle(color: Colors.white),),
         backgroundColor: Colors.blueAccent,
         elevation: 0,
       ),
@@ -94,7 +94,7 @@ class _InstructorLoginPageState extends State<InstructorLoginPage> {
                         ),
                         child: Text(
                           'Forgot Password?',
-                          style: TextStyle(color: Colors.blueAccent, fontSize: 16),
+                          style: TextStyle(color: Colors.blueAccent, fontSize: 16,),
                         ),
                       ),
                     ),
@@ -188,7 +188,7 @@ class ForgotPasswordPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Forgot Password'),
+        title: Text('Forgot Password', style: TextStyle(color: Colors.white),),
         backgroundColor: Colors.blueAccent,
         elevation: 0,
       ),

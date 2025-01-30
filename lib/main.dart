@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: AuthHandler(), // Redirect logic based on user login status
+      home: AuthHandler(),
     );
   }
 }
@@ -42,7 +42,7 @@ class AuthHandler extends StatelessWidget {
       if (userDoc.exists) {
         // Convert `userId` to String if stored as a number
         String role = userDoc['role'];
-        String userId = userDoc['userId'].toString(); // Ensure `userId` is a String
+        String userId = userDoc['userId'].toString();
         print("ekahnea achi ami2");
         print(role);
         print(userId);
@@ -50,7 +50,7 @@ class AuthHandler extends StatelessWidget {
       }
     }
 
-    return {}; // Return an empty map if no user is logged in
+    return {};
   }
 
   @override
@@ -68,9 +68,9 @@ class AuthHandler extends StatelessWidget {
           print(role);
           print(userId);
 
-          return HomePage(role: role, userId: userId); // Pass role and userId to HomePage
+          return HomePage(role: role, userId: userId);
         } else {
-          return OnboardingPage(); // Redirect to onboarding if no user is logged in
+          return OnboardingPage();
         }
       },
     );

@@ -38,7 +38,7 @@ class _StudentRegisterPageState extends State<StudentRegisterPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Student Registration'),
+        title: Text('Student Registration', style: TextStyle(color: Colors.white),),
         backgroundColor: Colors.blueAccent,
       ),
       body: SingleChildScrollView(
@@ -143,7 +143,7 @@ class _StudentRegisterPageState extends State<StudentRegisterPage> {
                         }
                       }
                     },
-                    child: Text('Register'),
+                    child: Text('Register', style: TextStyle(color: Colors.white),),
                     style: ElevatedButton.styleFrom(
                       minimumSize: Size(double.infinity, 50), backgroundColor: Colors.blueAccent,
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),

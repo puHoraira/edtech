@@ -48,7 +48,7 @@ class AboutUsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('About Us'),
+        title: Text('About Us', style: TextStyle(color: Colors.white),),
         backgroundColor: Colors.teal,
       ),
       body: ListView.builder(

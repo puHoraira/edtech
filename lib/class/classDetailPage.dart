@@ -26,7 +26,7 @@ class ClassDetailsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(classTitle),
+        title: Text(classTitle, style: TextStyle(color: Colors.white),),
         backgroundColor: Colors.blueAccent,
       ),
       body: Padding(

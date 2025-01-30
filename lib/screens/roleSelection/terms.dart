@@ -7,7 +7,7 @@ class TermsAndConditionsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Terms and Conditions'),
+        title: Text('Terms and Conditions', style: TextStyle(color: Colors.white),),
         backgroundColor: Colors.teal,
       ),
       body: SingleChildScrollView(
@@ -103,7 +103,7 @@ class TermsAndConditionsPage extends StatelessWidget {
                 ),
                 child: Text(
                   'I Understand',
-                  style: TextStyle(fontSize: 16),
+                  style: TextStyle(fontSize: 16, color: Colors.white),
                 ),
               ),
             ),

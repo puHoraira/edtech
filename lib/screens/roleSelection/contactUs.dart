@@ -68,7 +68,7 @@ class ContactUsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Contact Us'),
+        title: Text('Contact Us', style: TextStyle(color: Colors.white),),
         backgroundColor: Colors.teal,
       ),
       body: Container(

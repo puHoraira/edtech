@@ -24,7 +24,7 @@ class StudentCourseDetailPage extends StatelessWidget {
         backgroundColor: Colors.indigo,
         title: const Text(
           'Course Details',
-          style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+          style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.white),
         ),
         centerTitle: true,
       ),
@@ -96,7 +96,7 @@ class StudentCourseDetailPage extends StatelessWidget {
                           icon: const Icon(Icons.leaderboard, color: Colors.white),
                           label: const Text(
                             'Leaderboard',
-                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black),
                           ),
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.greenAccent,
@@ -125,10 +125,10 @@ class StudentCourseDetailPage extends StatelessWidget {
                           icon: const Icon(Icons.chat, color: Colors.white),
                           label: const Text(
                             'Chat',
-                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black),
                           ),
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.blueAccent,
+                            backgroundColor: Colors.greenAccent,
                             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(25),

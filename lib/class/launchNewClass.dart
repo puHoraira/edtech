@@ -22,7 +22,7 @@ class _LaunchNewClassPageState extends State<LaunchNewClassPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Launch New Class'),
+        title: const Text('Launch New Class', style: TextStyle(color: Colors.white),),
         backgroundColor: Colors.blueAccent,
         centerTitle: true,
       ),
@@ -133,7 +133,7 @@ class _LaunchNewClassPageState extends State<LaunchNewClassPage> {
                 ),
                 child: const Text(
                   'Create Class',
-                  style: TextStyle(fontSize: 16),
+                  style: TextStyle(fontSize: 16, color: Colors.white),
                 ),
               ),
             ],

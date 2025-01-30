@@ -13,7 +13,7 @@ class ViewPreviousQuizzesPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text(
           'Previous Quizzes',
-          style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+          style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.white),
         ),
         backgroundColor: Colors.indigo,
         centerTitle: true,

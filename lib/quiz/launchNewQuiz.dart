@@ -43,7 +43,7 @@ class _LaunchNewQuizPageState extends State<LaunchNewQuizPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).primaryColor,
-        title: const Text('Create New Quiz'),
+        title: const Text('Create New Quiz', style: TextStyle(color: Colors.white),),
         centerTitle: true,
         elevation: 0,
       ),
@@ -165,7 +165,7 @@ class _LaunchNewQuizPageState extends State<LaunchNewQuizPage> {
                 ElevatedButton.icon(
                   onPressed: _addQuestion,
                   icon: const Icon(Icons.add),
-                  label: const Text('Add Question'),
+                  label: const Text('Add Question', style: TextStyle(color: Colors.white),),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.blue,
                     padding: const EdgeInsets.symmetric(

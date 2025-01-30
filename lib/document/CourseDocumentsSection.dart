@@ -22,6 +22,7 @@ class CourseDocumentsSection extends StatefulWidget {
 
 class _CourseDocumentsSectionState extends State<CourseDocumentsSection> {
   final Map<String, bool> downloadedFiles = {};
+  final TextEditingController _renameController = TextEditingController();
 
   @override
   void initState() {
@@ -29,17 +30,61 @@ class _CourseDocumentsSectionState extends State<CourseDocumentsSection> {
     loadDownloadedFiles();
   }
 
+  @override
+  void dispose() {
+    _renameController.dispose();
+    super.dispose();
+  }
+
+  Future<String?> _showRenameDialog(String originalFileName) async {
+    _renameController.text = originalFileName;
+
+    return showDialog<String>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Rename File'),
+          content: TextField(
+            controller: _renameController,
+            decoration: const InputDecoration(
+              labelText: 'File Name',
+              hintText: 'Enter new file name',
+            ),
+            autofocus: true,
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                String newFileName = _renameController.text.trim();
+                if (newFileName.isEmpty) {
+                  return;
+                }
+                // Preserve the original file extension
+                final String extension = path.extension(originalFileName);
+                if (!newFileName.endsWith(extension)) {
+                  newFileName = '$newFileName$extension';
+                }
+                Navigator.of(context).pop(newFileName);
+              },
+              child: const Text('Rename'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   // Load downloaded files from local storage
   Future<void> loadDownloadedFiles() async {
     final directory = await getApplicationDocumentsDirectory();
-
-    // List all files in the documents directory
     final files = directory.listSync();
     for (var file in files) {
       if (file is File) {
         setState(() {
-          print(path.basename(file.path));
-          print("------------------------");
           downloadedFiles[path.basename(file.path)] = true;
         });
       }
@@ -59,12 +104,17 @@ class _CourseDocumentsSectionState extends State<CourseDocumentsSection> {
       if (result.files.single.path == null) {
         throw Exception('File path is null');
       }
+
       File file = File(result.files.single.path!);
-      String fileName = path.basename(file.path);
+      String originalFileName = path.basename(file.path);
+
+      // Show rename dialog
+      String? newFileName = await _showRenameDialog(originalFileName);
+      if (newFileName == null) return; // User cancelled the rename
 
       // Firebase Storage reference
       final storageRef = FirebaseStorage.instance.ref();
-      final fileRef = storageRef.child('courses/${widget.courseId}/documents/$fileName');
+      final fileRef = storageRef.child('courses/${widget.courseId}/documents/$newFileName');
 
       // Show progress dialog
       showDialog(
@@ -95,7 +145,7 @@ class _CourseDocumentsSectionState extends State<CourseDocumentsSection> {
         final courseRef = FirebaseFirestore.instance.collection('courses').doc(widget.courseId);
         await courseRef.update({
           'files': FieldValue.arrayUnion([{
-            'name': fileName,
+            'name': newFileName,
             'url': downloadUrl,
             'uploadedAt': Timestamp.now(),
           }]),
@@ -125,19 +175,16 @@ class _CourseDocumentsSectionState extends State<CourseDocumentsSection> {
       final filePath = '${directory.path}/$fileName';
       final file = File(filePath);
 
-      // Check if the file already exists locally
       if (await file.exists()) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('$fileName has already been downloaded')),
         );
-        return; // File already exists, no need to download again
+        return;
       }
 
-      // Proceed with downloading the file
       final dio = Dio();
       await dio.download(url, filePath);
 
-      // Mark the file as downloaded
       setState(() {
         downloadedFiles[fileName] = true;
       });
@@ -166,6 +213,7 @@ class _CourseDocumentsSectionState extends State<CourseDocumentsSection> {
 
   @override
   Widget build(BuildContext context) {
+    // Build method remains unchanged
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

@@ -104,7 +104,7 @@ class _LaunchNewCoursePageState extends State<LaunchNewCoursePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Launch New Course"),
+        title: const Text("Launch New Course", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
         centerTitle: true,
         backgroundColor: Colors.indigo,
       ),
@@ -226,14 +226,14 @@ class _LaunchNewCoursePageState extends State<LaunchNewCoursePage> {
                     onPressed: _launchCourse,
                     style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(vertical: 16),
-                      backgroundColor: Colors.lightGreen,
+                      backgroundColor: Colors.green,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),
                     ),
                     child: const Text(
                       "Launch Course",
-                      style: TextStyle(fontSize: 16),
+                      style: TextStyle(fontSize: 16, color: Colors.black),
                     ),
                   ),
                 ),

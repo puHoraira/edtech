@@ -61,7 +61,7 @@ class _StudentChatPageState extends State<StudentChatPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Chat with Instructor'),
+        title: Text('Chat with Instructor',  style: TextStyle(color: Colors.white),),
         backgroundColor: Colors.indigo,
       ),
       body: Column(

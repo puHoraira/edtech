@@ -15,7 +15,7 @@ class RoleSelectionPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Select Role'),
+        title: Text('Select Role', style: TextStyle(color: Colors.white),),
         backgroundColor: Colors.teal,
         elevation: 0,
       ),

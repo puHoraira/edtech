@@ -16,7 +16,7 @@ class LaunchedCoursesPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text(
           "Launched Courses",
-          style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+          style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.white),
         ),
         centerTitle: true,
         elevation: 4,

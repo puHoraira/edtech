@@ -50,7 +50,7 @@ class CourseDetailPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(title),
+        title: Text(title, style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
         backgroundColor: Colors.deepPurple,
       ),
       body: FutureBuilder<DocumentSnapshot>(
@@ -184,7 +184,7 @@ class CourseDetailPage extends StatelessWidget {
                             );
                           }
                         },
-                        child: const Text('Enroll', style: TextStyle(fontSize: 18)),
+                        child: const Text('Enroll', style: TextStyle(fontSize: 18, color: Colors.white)),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.lightBlueAccent,
                           padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),

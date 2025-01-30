@@ -14,7 +14,7 @@ class EnrolledCoursesPage extends StatelessWidget {
     print("-------");
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Enrolled Courses'),
+        title: const Text('Enrolled Courses', style: TextStyle(color: Colors.white),),
         backgroundColor: Colors.indigo,
       ),
       body: StreamBuilder<QuerySnapshot>(

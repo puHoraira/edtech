@@ -49,7 +49,7 @@ class TeacherQuizDetailPage extends StatelessWidget {
               .snapshots(),
           builder: (context, snapshot) {
             if (!snapshot.hasData) return const Text('Quiz Details');
-            return Text(snapshot.data?['title'] ?? 'Quiz Details');
+            return Text(snapshot.data?['title'] ?? 'Quiz Details', style: TextStyle(color: Colors.white),);
           },
         ),
         centerTitle: true,

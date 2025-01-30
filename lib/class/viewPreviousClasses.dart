@@ -14,7 +14,7 @@ class ViewPreviousClassesPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Previous Classes'),
+        title: const Text('Previous Classes', style: TextStyle(color: Colors.white),),
         backgroundColor: Colors.blueAccent,
       ),
       body: StreamBuilder<QuerySnapshot>(
