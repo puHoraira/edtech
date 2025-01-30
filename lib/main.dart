@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'EdTech',
+      title: 'Learn Sphere',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.blue,
@@ -30,7 +30,6 @@ class AuthHandler extends StatelessWidget {
 
   Future<Map<String, String>> getUserRoleAndId() async {
     User? user = FirebaseAuth.instance.currentUser;
-    print(user);
 
     if (user != null) {
       // Fetch user details from Firestore
@@ -43,9 +42,6 @@ class AuthHandler extends StatelessWidget {
         // Convert `userId` to String if stored as a number
         String role = userDoc['role'];
         String userId = userDoc['userId'].toString();
-        print("ekahnea achi ami2");
-        print(role);
-        print(userId);
         return {'role': role, 'userId': userId};
       }
     }
@@ -55,11 +51,9 @@ class AuthHandler extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("ekio");
     return FutureBuilder<Map<String, String>>(
       future: getUserRoleAndId(),
       builder: (context, snapshot) {
-
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(child: CircularProgressIndicator());
         } else if (snapshot.hasData && snapshot.data!.isNotEmpty) {

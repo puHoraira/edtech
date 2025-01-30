@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+
 class StudentRegisterPage extends StatefulWidget {
   @override
   _StudentRegisterPageState createState() => _StudentRegisterPageState();
@@ -134,9 +135,10 @@ class _StudentRegisterPageState extends State<StudentRegisterPage> {
                           });
 
                           await userCredential.user?.sendEmailVerification();
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Registration successful!')));
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Registration successful! Please check your email for verification')));
 
                           // Navigate back to the previous screen
+                          await FirebaseAuth.instance.signOut();
                           Navigator.pop(context);
                         } catch (e) {
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Registration failed: $e')));
