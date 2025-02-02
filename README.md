@@ -1,6 +1,6 @@
 # edtech
 
-Project about Online Education App (EdTech)
+Project about Online Education App (LearnSphere) [Previously EdTech]
 
 
 Date: 29/12/2024
@@ -47,3 +47,4 @@ androidManifest.xml modificaitons:
 <category android:name="android.intent.category.BROWSABLE" />
 <data android:scheme="https" />
 </intent>
+
